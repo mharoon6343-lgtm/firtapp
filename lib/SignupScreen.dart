@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/LocationScreen.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
@@ -13,6 +13,33 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+
+  Future<void> addUserData() async {
+    try {
+      String name = nameController.text;
+      String email = emailController.text;
+      String password = passwordController.text;
+      if (name.isEmpty || email.isEmpty || password.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Please fill all fields")),
+        );
+        return;
+      }
+      await FirebaseFirestore.instance.collection("users").add({
+        "name": nameController.text,
+        "email": emailController.text,
+        "password": passwordController.text,
+      });
+
+      print("Data Added Successfully");
+
+      nameController.clear();
+      emailController.clear();
+      passwordController.clear();
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
   @override
   void dispose() {
     nameController.dispose();
@@ -139,19 +166,8 @@ class _SignupScreenState extends State<SignupScreen> {
             SizedBox(height: 30),
             InkWell(
               onTap: () {
-                String name = nameController.text;
-                String email = emailController.text;
-                String password = passwordController.text;
-                if (name.isEmpty || email.isEmpty || password.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Please fill all fields")),
-                  );
-                  return;
-                }
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => LocationScreen()),
-                );
+
+                addUserData();
               },
               child: Container(
                 width: double.infinity,
