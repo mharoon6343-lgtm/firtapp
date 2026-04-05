@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "14354973937",
+    "project_id": "foood-f27e7",
+    "storage_bucket": "foood-f27e7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14354973937:android:6a6d946bd81c2f7b4b9550",
+        "android_client_info": {
+          "package_name": "com.example.restaurant_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhuyja3BY121_CS3NwGn-xYnlzQED6AAE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
