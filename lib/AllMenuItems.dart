@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class AllMenuItems extends StatefulWidget {
@@ -11,7 +12,11 @@ class _AllMenuItemsState extends State<AllMenuItems> {
   int qty1 = 10;
   int qty2 = 15;
   int qty3 = 10;
-
+  Future<void> getmenuItems() async {
+    var result = await FirebaseFirestore.instance
+        .collection("Menu")
+        .get();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

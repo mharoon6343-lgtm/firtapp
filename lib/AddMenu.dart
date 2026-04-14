@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class AddMenu extends StatefulWidget {
@@ -22,7 +23,17 @@ class _AddMenuState extends State<AddMenu> {
     ingredientsController.dispose();
     super.dispose();
   }
+Future<void> saveMenu()async {
 
+
+  await FirebaseFirestore.instance.collection("Menu").add({
+    "name": itemNameController.text,
+    "price": itemPriceController.text,
+    "description": descriptionController.text,
+    "ingredients":ingredientsController.text
+  });
+  Navigator.pop(context);
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,15 +152,7 @@ class _AddMenuState extends State<AddMenu> {
                 Center(
                   child: InkWell(
                     onTap: () {
-                      String name = itemNameController.text;
-                      String price = itemPriceController.text;
-                      String description = descriptionController.text;
-                      String ingredients = ingredientsController.text;
-                      print(name);
-                      print(price);
-                      print(description);
-                      print(ingredients);
-                      Navigator.pop(context);
+                  saveMenu();
                     },
                     borderRadius: BorderRadius.circular(15),
                     child: Container(

@@ -23,6 +23,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (userData['password'] == passwordController.text.trim()) {
         print("Login Success");
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (context) => const HomeScreen(),
+          ),
+        );
       } else {
         print("Wrong Password");
       }
