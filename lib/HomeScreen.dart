@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/CartScreen.dart';
 import 'package:restaurant_app/FoodDetails.dart';
@@ -44,8 +45,34 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class HomeContent extends StatelessWidget {
+class HomeContent extends StatefulWidget {
   const HomeContent({super.key});
+
+  @override
+  State<HomeContent> createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<HomeContent> {
+
+  List menuList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getallmenu();
+  }
+
+  Future<void> getallmenu() async {
+    var result = await FirebaseFirestore.instance
+        .collection("Menu")
+        .get();
+
+    setState(() {
+      menuList = result.docs.map((doc) => doc.data()).toList();
+    });
+
+    print(menuList);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +96,7 @@ class HomeContent extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
             ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: Image.asset("assets/Pizza Banner.jpg",
@@ -76,7 +104,9 @@ class HomeContent extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
+
             SizedBox(height: 25),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -94,35 +124,71 @@ class HomeContent extends StatelessWidget {
                 ),
               ],
             ),
+
             SizedBox(height: 15),
+
             popularTile(context, "Herbal Pancake", "\$7", "assets/Herbal Pancake.jpg"),
             popularTile(context, "Fruit Salad", "\$5", "assets/Fruit Salad.jpg"),
             popularTile(context, "Green Noodle", "\$15", "assets/Green Noodle.jpg"),
+
+            SizedBox(height: 20),
+
+            ListView.builder(
+              itemCount: menuList.length,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+
+                var item = menuList[index];
+
+                return popularTile(
+                  context,
+                  item['name'] ?? "No Name",
+                  item['price'] ?? "0",
+                  item['image'] ?? "assets/Herbal Pancake.jpg", // fallback
+                );
+              },
+            ),
           ],
         ),
       ),
     );
   }
+
   Widget popularTile(BuildContext context, String name, String price, String image) {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 10, offset: const Offset(0, 5))],
+        boxShadow: [
+          BoxShadow(
+              color: Colors.grey.shade200,
+              blurRadius: 10,
+              offset: const Offset(0, 5))
+        ],
         color: Colors.white,
       ),
       child: Row(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(image, height: 55, width: 55, fit: BoxFit.cover),
+            child: Image.asset(
+              image,
+              height: 55,
+              width: 55,
+              fit: BoxFit.cover,
+            ),
           ),
           SizedBox(width: 15),
           Expanded(child: Text(name)),
           Text(
             price,
-            style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: Colors.red,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),

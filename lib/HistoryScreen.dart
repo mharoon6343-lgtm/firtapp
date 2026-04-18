@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_app/AddMenu.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -28,8 +29,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold)),
-                Icon(Icons.notifications_none,
-                    color: Colors.red)
+                InkWell(
+                  onTap: (){
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (context) => const AddMenu(),
+                      ),
+                    );
+                  },
+                  child: Icon(Icons.notifications_none,
+                      color: Colors.red),
+                )
               ],
             ),
             SizedBox(height: 30),
