@@ -25,6 +25,7 @@ import 'package:restaurant_app/OnBoardScreen.dart';
 import 'package:restaurant_app/SignupScreen.dart';
 import 'package:restaurant_app/SplashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:restaurant_app/mydesign.dart';
 import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,7 +63,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const OnBoardScreen(),
+      home: HomeScreen(),
     );
   }
 }

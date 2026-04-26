@@ -68,12 +68,24 @@ class _HomeContentState extends State<HomeContent> {
         .get();
 
     setState(() {
-      menuList = result.docs.map((doc) => doc.data()).toList();
+      menuList = result.docs.map((doc) {
+        return {
+          'id': doc.id,
+          ...doc.data(),
+
+        };
+      }).toList();
     });
 
     print(menuList);
   }
-
+  Future<void> deleteMenuItem(String docId) async {
+    await FirebaseFirestore.instance
+        .collection('Menu')
+        .doc(docId)
+        .delete();
+    getallmenu();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,11 +139,8 @@ class _HomeContentState extends State<HomeContent> {
 
             SizedBox(height: 15),
 
-            popularTile(context, "Herbal Pancake", "\$7", "assets/Herbal Pancake.jpg"),
-            popularTile(context, "Fruit Salad", "\$5", "assets/Fruit Salad.jpg"),
-            popularTile(context, "Green Noodle", "\$15", "assets/Green Noodle.jpg"),
 
-            SizedBox(height: 20),
+
 
             ListView.builder(
               itemCount: menuList.length,
@@ -145,7 +154,8 @@ class _HomeContentState extends State<HomeContent> {
                   context,
                   item['name'] ?? "No Name",
                   item['price'] ?? "0",
-                  item['image'] ?? "assets/Herbal Pancake.jpg", // fallback
+                  item['image'] ?? "assets/Herbal Pancake.jpg",
+                  item["id"]??"0"// fallback
                 );
               },
             ),
@@ -155,7 +165,7 @@ class _HomeContentState extends State<HomeContent> {
     );
   }
 
-  Widget popularTile(BuildContext context, String name, String price, String image) {
+  Widget popularTile(BuildContext context, String name, String price, String image,String id) {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       padding: EdgeInsets.all(12),
@@ -182,12 +192,17 @@ class _HomeContentState extends State<HomeContent> {
           ),
           SizedBox(width: 15),
           Expanded(child: Text(name)),
-          Text(
-            price,
-            style: TextStyle(
-              color: Colors.red,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+          InkWell(
+            onTap: (){
+              deleteMenuItem(id);
+            },
+            child: Text(
+              price,
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],
