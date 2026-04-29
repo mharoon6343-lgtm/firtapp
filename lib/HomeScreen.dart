@@ -4,7 +4,8 @@ import 'package:restaurant_app/CartScreen.dart';
 import 'package:restaurant_app/FoodDetails.dart';
 import 'package:restaurant_app/HistoryScreen.dart';
 import 'package:restaurant_app/ProfileScreen.dart';
-
+import 'package:restaurant_app/updatemenu.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -198,6 +199,24 @@ class _HomeContentState extends State<HomeContent> {
             },
             child: Text(
               price,
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setString('id', id.toString());
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UpdateMenu()),
+              );
+            },
+            child: Text(
+              "update",
               style: TextStyle(
                 color: Colors.red,
                 fontSize: 16,
